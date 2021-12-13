@@ -11,7 +11,6 @@ class userInput extends React.Component {
     };
   }
 
-  
   render() {
     return (
       <input

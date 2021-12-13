@@ -1,38 +1,68 @@
-import React, { Component, useState } from 'react';
-import './App.css';
+import React from "react";
+import Person from "./Person/Person";
+import "./App.css";
 
-import UserInput from './UserInput/UserInput';
-import UserOutput from './UserOutput/UserOutput';
+class App extends React.Component {
+  constructor(props) {
+    // fires before component is mounted
+    super(props); // makes this refer to this component
+    this.state = {
+      toggleName: "Show",
+      name: "Max",
+      personData:[{id:1, name:'max', age:25},
+                  {id:2, name:'William', age:22},
+                  {id:3, name:'Jack', age:28},]
+    }; // set state
+  }
 
-const App=(props)=> {
+  changeName = (e) => {
+    // alert('inputing in first text')
+    console.log(e.target.value)
+    console.log(e.target.id)
+    let _id=e.target.id
+    const new_personData=Array.from(this.state.personData)
+    new_personData.splice(_id-1,1, {id:_id, name:e.target.value, age:this.state.personData[_id-1].age})    
+    this.setState({ personData: new_personData });
+    debugger
+  };
 
-  const [name, setName]= useState('supermax')
+  nameList = (e) => {
+    var x = document.getElementById("showBtn").innerText;
+    console.log(x);
+    if (x === "Show") {
+      // alert('show')
+      this.setState({ toggleName: "Hide" });
+      
+    } else {
+      this.setState({ toggleName: "Show" });
+    }
+  };
 
-  const usernameChangedHandler = (event) => {
-    setName(event.target.value)};
 
-  return (
-    <div className="App">
-      <ol>
-        <li>Create TWO new components: UserInput and UserOutput</li>
-        <li>UserInput should hold an input element, UserOutput two paragraphs</li>
-        <li>Output multiple UserOutput components in the App component (any paragraph texts of your choice)</li>
-        <li>Pass a username (of your choice) to UserOutput via props and display it there</li>
-        <li>Add state to the App component (=> the username) and pass the username to the UserOutput component</li>
-        <li>Add a method to manipulate the state (=> an event-handler method)</li>
-        <li>Pass the event-handler method reference to the UserInput component and bind it to the input-change event</li>
-        <li>Ensure that the new input entered by the user overwrites the old username passed to UserOutput</li>
-        <li>Add two-way-binding to your input (in UserInput) to also display the starting username</li>
-        <li>Add styling of your choice to your components/ elements in the components - both with inline styles and stylesheets</li>
-      </ol>
-      <UserInput 
-        changed={usernameChangedHandler} 
-        currentName={name} />
-      <UserOutput userName={name} />
-      <UserOutput userName={name} />
-      <UserOutput userName="Max" />
-    </div>
-  );
+  
+  render() {
+    const person_array=this.state.personData.map(person=><Person id={person.id} name={person.name} onChange={this.changeName}></Person>)
+    let persons=null
+    if (this.state.toggleName==='Show'){
+      persons = (
+        <>
+          {person_array}
+        </>
+      );
+    } else {
+      persons=''
+    }
+    return (
+      <div className="App">
+        <h1>Hi, I'm React App</h1>
+        <p>This is really working</p>
+        <button id="showBtn" onClick={this.nameList}>
+          {this.state.toggleName}
+        </button>
+        {persons}
+      </div>
+    );
+  }
 }
 
 export default App;

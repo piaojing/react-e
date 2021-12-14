@@ -43,7 +43,7 @@ class App extends React.Component {
   render() {
     const person_array=this.state.personData.map(person=><Person id={person.id} name={person.name} onChange={this.changeName}></Person>)
     let persons=null
-    if (this.state.toggleName==='Show'){
+    if (this.state.toggleName==='Hide'){
       persons = (
         <>
           {person_array}
